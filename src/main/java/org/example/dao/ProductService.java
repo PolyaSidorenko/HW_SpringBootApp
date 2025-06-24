@@ -2,7 +2,7 @@ package org.example.dao;
 
 import org.example.domain.Product;
 import org.example.repository.ProductRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,12 +11,12 @@ import java.util.Optional;
  * DAO для работы с сущностью Product
  * Предоставляет методы для создания, получения, обновления и удаления товаров с использованием Hibernate
  */
-@Repository
-public class ProductDAO {
+@Service
+public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductDAO(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -46,7 +46,9 @@ public class ProductDAO {
     }
 
     public void delete(Product product) {
-        productRepository.delete(product);
+        if(productRepository.findById(product.getId()).isPresent()) {
+            productRepository.delete(product);
+        }
     }
 
     public Product getById(long id) {

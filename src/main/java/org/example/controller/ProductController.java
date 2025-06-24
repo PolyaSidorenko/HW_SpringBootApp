@@ -1,8 +1,8 @@
 package org.example.controller;
 
-import org.example.dao.ProductDAO;
+import lombok.AllArgsConstructor;
+import org.example.dao.ProductService;
 import org.example.domain.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,18 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @Controller
 @RequestMapping("/products")
+@AllArgsConstructor
 public class ProductController {
 
-    private final ProductDAO productDAO;
-
-    @Autowired
-    public ProductController(ProductDAO productDAO) {
-        this.productDAO = productDAO;
-    }
+    private final ProductService productService;
 
     @GetMapping
     public String allProducts(Model model) {
-        model.addAttribute("products", productDAO.getAll());
+        model.addAttribute("products", productService.getAll());
         return "allProducts";
     }
 
@@ -39,13 +35,13 @@ public class ProductController {
 
     @PostMapping
     public String saveProduct(@ModelAttribute("product") Product product) {
-        productDAO.create(product);
+        productService.create(product);
         return "redirect:/products";
     }
 
     @GetMapping("/edit/{id}")
     public String editProduct(@PathVariable("id") long id, Model model) {
-        Product product = productDAO.getById(id);
+        Product product = productService.getById(id);
         if (product == null) {
             return "redirect:/products";
         }
@@ -55,16 +51,13 @@ public class ProductController {
 
     @PostMapping("/update")
     public String updateProduct(@ModelAttribute("product") Product product) {
-        productDAO.update(product);
+        productService.update(product);
         return "redirect:/products";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") long id) {
-        Product product = productDAO.getById(id);
-        if (product != null) {
-            productDAO.delete(product);
-        }
+        productService.delete(productService.getById(id));
         return "redirect:/products";
     }
 }

@@ -1,15 +1,21 @@
 package org.example.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Objects;
 
 @Setter
 @Getter
 @Entity
 @Table(name = "products")
+@Data
 public class Product {
 
     /**
@@ -37,25 +43,4 @@ public class Product {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(price, product.price) && Objects.equals(quantity, product.quantity);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, price, quantity);
-    }
 }
